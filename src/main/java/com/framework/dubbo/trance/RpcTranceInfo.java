@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by yuanjinglin on 17/6/2.
  */
-public class RpcTranferInfo implements Serializable{
+public class RpcTranceInfo implements Serializable{
     private static final long serialVersionUID = -5452491506958823224L;
     private String ip;
     private String applicationName;
