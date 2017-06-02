@@ -1,10 +1,14 @@
 package com.framework.dubbo.filter;
 
+import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.extension.Activate;
 import com.alibaba.dubbo.common.extension.Adaptive;
 import com.alibaba.dubbo.rpc.*;
+import com.framework.dubbo.trace.TraceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * Created by yuanjinglin on 17/6/1.
@@ -15,6 +19,11 @@ public class EyesFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         LOGGER.info("eyes fileter working!!!");
+        URL url=invoker.getUrl();
+
+        Map<String, String> attaches = invocation.getAttachments();
+        attaches.put(TraceContext.TRACE_ID_KEY,"test001");
+        attaches.put(TraceContext.SPAN_ID_KEY,"1");
         return invoker.invoke(invocation);
     }
 }

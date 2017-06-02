@@ -13,7 +13,7 @@ public class RpcTraceInfo implements Serializable{
     /**
      * 调用全局id
      */
-    private Long traceId;
+    private String traceId;
     /**
      * 每一次调用都认为是一个span
      */
@@ -109,11 +109,11 @@ public class RpcTraceInfo implements Serializable{
         this.sst = sst;
     }
 
-    public Long getTraceId() {
+    public String getTraceId() {
         return traceId;
     }
 
-    public void setTraceId(Long traceId) {
+    public void setTraceId(String traceId) {
         this.traceId = traceId;
     }
 }
