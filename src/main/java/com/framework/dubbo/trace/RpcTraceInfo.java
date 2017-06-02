@@ -1,4 +1,4 @@
-package com.framework.dubbo.trance;
+package com.framework.dubbo.trace;
 
 import java.io.Serializable;
 import java.util.Date;
