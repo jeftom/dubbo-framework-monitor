@@ -6,22 +6,22 @@ import java.util.Date;
 /**
  * Created by yuanjinglin on 17/6/2.
  */
-public class RpcTranceInfo implements Serializable{
+public class RpcTraceInfo implements Serializable{
     private static final long serialVersionUID = -5452491506958823224L;
     private String ip;
     private String applicationName;
     /**
      * 调用全局id
      */
-    private String traceId;
+    private Long traceId;
     /**
      * 每一次调用都认为是一个span
      */
-    private String spanId;
+    private Long spanId;
     /**
      * 父级id,用于构建调用链树
      */
-    private String parentId;
+    private Long parentId;
     /**
      * 客户端发送请求时间
      * 客户端调用时间=cr-cs
@@ -73,19 +73,23 @@ public class RpcTranceInfo implements Serializable{
         this.ip = ip;
     }
 
-    public String getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(String parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
-    public String getSpanId() {
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Long getSpanId() {
         return spanId;
     }
 
-    public void setSpanId(String spanId) {
+    public void setSpanId(Long spanId) {
         this.spanId = spanId;
     }
 
@@ -105,11 +109,11 @@ public class RpcTranceInfo implements Serializable{
         this.sst = sst;
     }
 
-    public String getTraceId() {
+    public Long getTraceId() {
         return traceId;
     }
 
-    public void setTraceId(String traceId) {
+    public void setTraceId(Long traceId) {
         this.traceId = traceId;
     }
 }
