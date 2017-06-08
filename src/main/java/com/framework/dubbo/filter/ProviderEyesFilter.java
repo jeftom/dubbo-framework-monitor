@@ -20,7 +20,6 @@ public class ProviderEyesFilter implements Filter {
     private static final Logger LOGGER= LoggerFactory.getLogger("eyesFilterLog");
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
-        LOGGER.info("provider eyes fileter working!!!");
         Gson gson=new Gson();
         URL url=invoker.getUrl();
         Map<String,String> paramMap= url.getParameters();
@@ -41,11 +40,11 @@ public class ProviderEyesFilter implements Filter {
             TraceContext.setSpanId(serviceSpan.getSpanId());
         }
         serviceSpan.setState(SpanStateEnum.SR.getKey());
-        LOGGER.info("service::: sr"+serviceSpan);
+        LOGGER.info(serviceSpan.toString());
         Result result= invoker.invoke(invocation);
         serviceSpan.setSs(System.currentTimeMillis());
         serviceSpan.setState(SpanStateEnum.SS.getKey());
-        LOGGER.info("service::: ss"+serviceSpan);
+        LOGGER.info(serviceSpan.toString());
         return result;
     }
 }

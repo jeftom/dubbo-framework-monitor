@@ -22,7 +22,6 @@ public class ConsumeEyesFilter implements Filter {
     private static final Logger LOGGER= LoggerFactory.getLogger("eyesFilterLog");
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
-        LOGGER.info("counsumeeyes fileter working!!!");
         URL url=invoker.getUrl();
         Map<String,String> paramMap= url.getParameters();
         String applicationName=paramMap.get("application");
@@ -57,11 +56,11 @@ public class ConsumeEyesFilter implements Filter {
         attaches.put(TraceContext.SPAN_ID_KEY,nextChildSpanId);
         attaches.put(TraceContext.SPAN_KEY,gson.toJson(consumeSpan));
         consumeSpan.setState(SpanStateEnum.CS.getKey());
-        LOGGER.info("client:::"+consumeSpan.toString());
+        LOGGER.info(consumeSpan.toString());
         Result result =invoker.invoke(invocation);
         consumeSpan.setCr(System.currentTimeMillis());
         consumeSpan.setState(SpanStateEnum.CR.getKey());
-        LOGGER.info("client:::"+consumeSpan.toString());
+        LOGGER.info(consumeSpan.toString());
         return result;
     }
 }
