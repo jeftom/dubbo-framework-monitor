@@ -1,1 +1,3 @@
 eyes=com.framework.dubbo.filter.EyesFilter
+consumeEyes=com.framework.dubbo.filter.ConsumeEyesFilter
+providerEyes=com.framework.dubbo.filter.ProviderEyesFilter
