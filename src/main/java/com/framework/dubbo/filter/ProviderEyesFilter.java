@@ -17,7 +17,7 @@ import java.util.Map;
  */
 //@Activate(group = "provider", value = "EyesFilter")
 public class ProviderEyesFilter implements Filter {
-    private static final Logger LOGGER= LoggerFactory.getLogger(ProviderEyesFilter.class);
+    private static final Logger LOGGER= LoggerFactory.getLogger("eyesFilterLog");
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         LOGGER.info("provider eyes fileter working!!!");

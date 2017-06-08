@@ -19,7 +19,7 @@ import java.util.UUID;
  */
 //@Activate(group = "provider", value = "EyesFilter")
 public class ConsumeEyesFilter implements Filter {
-    private static final Logger LOGGER= LoggerFactory.getLogger(ConsumeEyesFilter.class);
+    private static final Logger LOGGER= LoggerFactory.getLogger("eyesFilterLog");
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         LOGGER.info("counsumeeyes fileter working!!!");
