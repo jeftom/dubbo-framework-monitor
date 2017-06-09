@@ -2,7 +2,7 @@ package com.framework.monitor.eyes.dubbo.filter;
 
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.rpc.*;
-import com.framework.monitor.eyes.dubbo.trace.Span;
+import com.framework.monitor.eyes.dubbo.trace.RPCSpan;
 import com.framework.monitor.eyes.dubbo.trace.SpanIDUtil;
 import com.framework.monitor.eyes.dubbo.trace.SpanStateEnum;
 import com.framework.monitor.eyes.dubbo.trace.TraceContext;
@@ -42,7 +42,7 @@ public class ConsumeEyesFilter implements Filter {
         }
         //生成本地调用span
         String nextChildSpanId= SpanIDUtil.proNextChildSpanId();
-        Span consumeSpan=new Span();
+        RPCSpan consumeSpan=new RPCSpan();
         consumeSpan.setParentId(spanId);
         consumeSpan.setSpanId(nextChildSpanId);
         consumeSpan.setTraceId(traceId);

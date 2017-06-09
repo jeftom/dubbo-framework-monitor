@@ -10,7 +10,8 @@ import java.util.List;
 public class TraceContext implements Serializable{
     private static ThreadLocal<String> TRACE_ID = new InheritableThreadLocal<>();
     private static ThreadLocal<String> LOCAL_SPAN_ID = new InheritableThreadLocal<>();
-    private static ThreadLocal<List<Span>> CHILD_SPAN_LIST = new InheritableThreadLocal<>();
+    private static ThreadLocal<List<RPCSpan>> CHILD_SPAN_LIST = new InheritableThreadLocal<>();
+    private static ThreadLocal<TraceData> LOCAL_METHDO_TRACE = new InheritableThreadLocal<>();
     public static final String TRACE_ID_KEY = "traceId";
     public static final String SPAN_ID_KEY = "spanId";
     public static final String SPAN_KEY="span";
@@ -23,6 +24,7 @@ public class TraceContext implements Serializable{
         TRACE_ID.remove();
         LOCAL_SPAN_ID.remove();
         CHILD_SPAN_LIST.remove();
+        LOCAL_METHDO_TRACE.remove();
     }
     public static void start(){
         clear();
@@ -43,7 +45,13 @@ public class TraceContext implements Serializable{
     public static int getNextSpanId(){
        return CHILD_SPAN_LIST.get().size();
     }
-    public static void addChildSpan(Span span){
+    public static void addChildSpan(RPCSpan span){
         CHILD_SPAN_LIST.get().add(span);
+    }
+    public static TraceData getMethodTrace(){
+        return LOCAL_METHDO_TRACE.get();
+    }
+    public static void setMethodTrace(TraceData traceData){
+        LOCAL_METHDO_TRACE.set(traceData);
     }
 }

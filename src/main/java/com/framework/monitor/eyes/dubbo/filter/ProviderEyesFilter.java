@@ -2,7 +2,7 @@ package com.framework.monitor.eyes.dubbo.filter;
 
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.rpc.*;
-import com.framework.monitor.eyes.dubbo.trace.Span;
+import com.framework.monitor.eyes.dubbo.trace.RPCSpan;
 import com.framework.monitor.eyes.dubbo.trace.SpanStateEnum;
 import com.framework.monitor.eyes.dubbo.trace.TraceContext;
 import com.google.gson.Gson;
@@ -26,8 +26,8 @@ public class ProviderEyesFilter implements Filter {
         String applicationName=paramMap.get("application");
         String ip=url.getHost();
         Map<String, String> attaches = invocation.getAttachments();
-        Span clientSpan=gson.fromJson(attaches.get(TraceContext.SPAN_KEY),Span.class);
-        Span serviceSpan=new Span();
+        RPCSpan clientSpan=gson.fromJson(attaches.get(TraceContext.SPAN_KEY),RPCSpan.class);
+        RPCSpan serviceSpan=new RPCSpan();
         serviceSpan.setSr(System.currentTimeMillis());
         serviceSpan.setApplicationName(applicationName);
         serviceSpan.setIp(ip);
