@@ -38,19 +38,13 @@ public class EyesMethodInterceptor implements MethodInterceptor {
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         if (switchOn) {
-            String name = null;
             Object result = null;
+            String name = invocation.getThis().getClass().getName() + "." + invocation.getMethod().getName();
             try {
-                name = invocation.getThis().getClass().getName() + "." + invocation.getMethod().getName();
-            } catch (Exception e) {
-                logger.error("EyesMethodInterceptor error!!", e);
-            }
-            try {
-                startCount(name);
+                before(name);
                 result = invocation.proceed();
             } finally {
-                stopCount(threshold);
-
+                after(threshold);
             }
             return result;
 
@@ -63,13 +57,13 @@ public class EyesMethodInterceptor implements MethodInterceptor {
     /**
      * 统计方法执行时间开始，该方法放置于MethodInvocation的proceed之前。
      *
-     * @param logName 纪录被代理累的方法名（即被拦截的被代理类方法名）
+     * @param name 纪录被代理类的方法名（即被拦截的被代理类方法名）
      */
-    public void startCount(String logName) {
+    public void before(String name) {
         //从dataHolder中获取AOP拦截的方法构建的StackData结构数据
         StackData data = dataHolder.get();
         //获取当前AOP拦截的方法构建的StackData结构数据
-        StackEntry currentEntry = new StackEntry(logName, System.currentTimeMillis());
+        StackEntry currentEntry = new StackEntry(name, System.currentTimeMillis());
         if (data == null || data.level == 0 || data.currentEntry == null) {
             data = new StackData();
             data.root = currentEntry;
@@ -78,13 +72,8 @@ public class EyesMethodInterceptor implements MethodInterceptor {
         } else {
             StackEntry parent = data.currentEntry;
             currentEntry.parent = parent;
-            try {
-                //被引用的子方法纪录到child中
-                parent.child.add(currentEntry);
-            } catch (Exception e) {
-                logger.error("MethodTimeAdvice Error ---", e);
-            }
-
+            //被引用的子方法纪录到child中
+            parent.child.add(currentEntry);
         }
         //纪录的结点下移，深度加一。
         data.currentEntry = currentEntry;
@@ -98,7 +87,7 @@ public class EyesMethodInterceptor implements MethodInterceptor {
      *
      * @param threshold 是否打印方法执行时间的阈值，统计结束时将执行时间超过该值则写入日志
      */
-    public void stopCount(int threshold) {
+    public void after(int threshold) {
         StackData data = dataHolder.get();
         if (data != null) {
             StackEntry self = data.currentEntry;

@@ -1,6 +1,7 @@
 package com.framework.monitor.Interceptor;
 
-import com.framework.monitor.bean.DistributionTraceBean;
+
+import com.framework.monitor.Interceptor.bean.DistributionTraceBean;
 import com.google.api.client.repackaged.com.google.common.base.Joiner;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
