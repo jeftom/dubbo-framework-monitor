@@ -7,15 +7,15 @@ package com.framework.monitor.eyes.dubbo.trace;
 /**
  * 保存监控信息变量
  */
-public  class TraceData {
+public  class LocalTraceData {
     /**
      * 记录根根节点
      */
-    public LocalMethodSpan root;
+    public MethodSpan root;
     /**
      * 当前正在调用方法节点
      */
-    public LocalMethodSpan currentEntry;
+    public MethodSpan currentEntry;
     /**
      * 堆栈树高度
      */

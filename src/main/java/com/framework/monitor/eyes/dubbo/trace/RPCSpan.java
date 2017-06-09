@@ -8,7 +8,8 @@ import java.io.Serializable;
  * Created by yuanjinglin on 17/6/8.
  */
 public class RPCSpan extends  Span implements Serializable {
-    private static final long serialVersionUID = -1914718972378147321L;
+
+    private static final long serialVersionUID = -5351285011174602214L;
     private String applicationName;
 
     /**
