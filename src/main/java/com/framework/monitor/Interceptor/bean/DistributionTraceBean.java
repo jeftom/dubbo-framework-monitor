@@ -1,4 +1,4 @@
-package com.framework.monitor.bean;
+package com.framework.monitor.Interceptor.bean;
 
 /**
  * Created by jm on 2016/8/18.
@@ -20,7 +20,7 @@ public class DistributionTraceBean {
 
     private final static ThreadLocal<DistributionTraceBean> threadLocal = new ThreadLocal<>();
 
-    public static DistributionTraceBean init(String uuid, String rpcId,String serialNumber ) {
+    public static DistributionTraceBean init(String uuid, String rpcId, String serialNumber ) {
         DistributionTraceBean requestContextBean = new DistributionTraceBean();
         requestContextBean.traceId = uuid;
         requestContextBean.rpcId = rpcId;

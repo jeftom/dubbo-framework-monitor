@@ -1,6 +1,9 @@
-package com.framework.monitor;
+package com.framework.monitor.eyes.dubbo.Interceptor;
 
-import com.framework.monitor.bean.DistributionTraceBean;
+import com.framework.monitor.Interceptor.StackData;
+import com.framework.monitor.Interceptor.StackEntry;
+
+import com.framework.monitor.Interceptor.bean.DistributionTraceBean;
 import com.google.api.client.repackaged.com.google.common.base.Joiner;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -13,11 +16,11 @@ import java.util.List;
 
 
 /**
- * Created by weile on 15/12/16.
+ * Created by yuanjinglin on 17/6/9.
  */
-public class MethodTimeAdviceForLogBack implements MethodInterceptor {
+public class EyesMethodInterceptor implements MethodInterceptor {
 
-    private static final Log logger = LogFactory.getLog("runTimeCount");
+    private static final Log logger = LogFactory.getLog("eyesFilterLog");
     /**
      * 性能监控开关可以在运行时动态设置开关
      */
@@ -40,7 +43,7 @@ public class MethodTimeAdviceForLogBack implements MethodInterceptor {
             try {
                 name = invocation.getThis().getClass().getName() + "." + invocation.getMethod().getName();
             } catch (Exception e) {
-                logger.error("MethodTimeAdive.ivoke() error", e);
+                logger.error("EyesMethodInterceptor error!!", e);
             }
             try {
                 startCount(name);
