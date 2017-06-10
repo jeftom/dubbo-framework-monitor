@@ -1,11 +1,9 @@
 package com.framework.monitor.eyes.dubbo.filter;
 
 import com.alibaba.dubbo.common.URL;
+import com.alibaba.dubbo.remoting.TimeoutException;
 import com.alibaba.dubbo.rpc.*;
-import com.framework.monitor.eyes.dubbo.trace.RPCSpan;
-import com.framework.monitor.eyes.dubbo.trace.SpanIDUtil;
-import com.framework.monitor.eyes.dubbo.trace.SpanStateEnum;
-import com.framework.monitor.eyes.dubbo.trace.TraceContext;
+import com.framework.monitor.eyes.dubbo.trace.*;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +24,7 @@ public class ConsumeEyesFilter implements Filter {
         Map<String,String> paramMap= url.getParameters();
         String applicationName=paramMap.get("application");
         String ip=url.getHost();
-
+        String methodName=url.getPath()+"."+paramMap.get("methods");
         //拿traceId,如果为空则是第一次调用,生成一个
         String traceId= TraceContext.getTraceId();
         if(traceId==null){
@@ -48,6 +46,7 @@ public class ConsumeEyesFilter implements Filter {
         consumeSpan.setTraceId(traceId);
         consumeSpan.setCs(System.currentTimeMillis());
         consumeSpan.setApplicationName(applicationName);
+        consumeSpan.setMethodName(methodName);
         consumeSpan.setIp(ip);
         TraceContext.addChildSpan(consumeSpan);
         Gson gson=new Gson();
@@ -57,10 +56,17 @@ public class ConsumeEyesFilter implements Filter {
         attaches.put(TraceContext.SPAN_KEY,gson.toJson(consumeSpan));
         consumeSpan.setState(SpanStateEnum.CS.getKey());
         LOGGER.info(consumeSpan.toString());
-        Result result =invoker.invoke(invocation);
-        consumeSpan.setCr(System.currentTimeMillis());
-        consumeSpan.setState(SpanStateEnum.CR.getKey());
-        LOGGER.info(consumeSpan.toString());
+        Result result=null;
+        try {
+            result=invoker.invoke(invocation);
+        }catch (Exception e){
+            consumeSpan.setResult(RPCResultEnum.ERROR.getKey());
+            throw e;
+        }finally {
+            consumeSpan.setCr(System.currentTimeMillis());
+            consumeSpan.setState(SpanStateEnum.CR.getKey());
+            LOGGER.info(consumeSpan.toString());
+        }
         return result;
     }
 }

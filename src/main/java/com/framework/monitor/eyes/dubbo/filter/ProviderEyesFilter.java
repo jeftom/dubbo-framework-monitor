@@ -2,6 +2,7 @@ package com.framework.monitor.eyes.dubbo.filter;
 
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.rpc.*;
+import com.framework.monitor.eyes.dubbo.trace.RPCResultEnum;
 import com.framework.monitor.eyes.dubbo.trace.RPCSpan;
 import com.framework.monitor.eyes.dubbo.trace.SpanStateEnum;
 import com.framework.monitor.eyes.dubbo.trace.TraceContext;
@@ -24,12 +25,14 @@ public class ProviderEyesFilter implements Filter {
         URL url=invoker.getUrl();
         Map<String,String> paramMap= url.getParameters();
         String applicationName=paramMap.get("application");
+        String methodName=url.getPath()+"."+paramMap.get("methods");
         String ip=url.getHost();
         Map<String, String> attaches = invocation.getAttachments();
         RPCSpan clientSpan=gson.fromJson(attaches.get(TraceContext.SPAN_KEY),RPCSpan.class);
         RPCSpan serviceSpan=new RPCSpan();
         serviceSpan.setSr(System.currentTimeMillis());
         serviceSpan.setApplicationName(applicationName);
+        serviceSpan.setMethodName(methodName);
         serviceSpan.setIp(ip);
         serviceSpan.setSpanId(clientSpan.getSpanId());
         serviceSpan.setTraceId(clientSpan.getTraceId());
@@ -41,10 +44,17 @@ public class ProviderEyesFilter implements Filter {
         }
         serviceSpan.setState(SpanStateEnum.SR.getKey());
         LOGGER.info(serviceSpan.toString());
-        Result result= invoker.invoke(invocation);
-        serviceSpan.setSs(System.currentTimeMillis());
-        serviceSpan.setState(SpanStateEnum.SS.getKey());
-        LOGGER.info(serviceSpan.toString());
+        Result result=null;
+        try {
+            result= invoker.invoke(invocation);
+        }catch (Exception e){
+            serviceSpan.setResult(RPCResultEnum.ERROR.getKey());
+            throw e;
+        }finally {
+            serviceSpan.setSs(System.currentTimeMillis());
+            serviceSpan.setState(SpanStateEnum.SS.getKey());
+            LOGGER.info(serviceSpan.toString());
+        }
         return result;
     }
 }

@@ -31,8 +31,9 @@ public class RPCSpan extends  Span implements Serializable {
 
     private String ip;
 
-    private Integer state;
+    private String state;
 
+    private String result=RPCResultEnum.OK.getKey();
     public String getParentId() {
         return parentId;
     }
@@ -98,12 +99,20 @@ public class RPCSpan extends  Span implements Serializable {
         this.ss = ss;
     }
 
-    public Integer getState() {
+    public String getState() {
         return state;
     }
 
-    public void setState(Integer state) {
+    public void setState(String state) {
         this.state = state;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 
     @Override

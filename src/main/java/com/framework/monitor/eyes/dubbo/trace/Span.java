@@ -8,6 +8,7 @@ public class Span {
      * 调用全局id
      */
     private String traceId;
+    private  String methodName;
 
     public String getTraceId() {
         return traceId;
@@ -15,5 +16,13 @@ public class Span {
 
     public void setTraceId(String traceId) {
         this.traceId = traceId;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
     }
 }

@@ -87,7 +87,7 @@ public class EyesMethodInterceptor implements MethodInterceptor {
             currentEntry.setTraceId(traceId);
         }
         currentEntry.setTraceId(traceId);
-        LOGGER.info(currentEntry.toString());
+        EYESLOGGER.info(currentEntry.toString());
         //纪录的结点下移，深度加一。
         traceData.currentEntry = currentEntry;//设置当前节点
         currentEntry.level = traceData.level;//设置点钱节点级别
@@ -109,7 +109,7 @@ public class EyesMethodInterceptor implements MethodInterceptor {
                 self.endTime = System.currentTimeMillis();
                 traceData.currentEntry = self.parent;
                 traceData.level--;
-                LOGGER.info(self.toString());
+                EYESLOGGER.info(self.toString());
                 TraceContext.setSpanId(traceData.level+"");
             }
         }

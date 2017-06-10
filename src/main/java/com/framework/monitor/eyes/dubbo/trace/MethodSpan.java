@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class MethodSpan extends Span implements Serializable {
     private static final long serialVersionUID = 6185949997237664073L;
-    public String methodName;
+
     public Long beginTime;
     public Long endTime;
     public int  level;
@@ -24,7 +24,7 @@ public class MethodSpan extends Span implements Serializable {
      */
    // public List<MethodSpan> childs;
     public MethodSpan(String methodName, long currentTimeMillis) {
-        this.methodName = methodName;
+        this.setMethodName(methodName);
         this.beginTime = currentTimeMillis;
        // this.childs = new ArrayList<MethodSpan>(3);
     }
