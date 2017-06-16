@@ -75,7 +75,7 @@ public class EyesMethodInterceptor implements MethodInterceptor {
             span.parentId=currentSpan.spanId;
             span.parent=currentSpan;
         }
-        span.setApplicationName(getProjectName());
+        span.setApplicationName(SysUtil.getProjectName(this));
         span.ip=SysUtil.getLocalIp();
         span.setTraceId(traceId);
         TraceContext.setSpan(span);
@@ -94,10 +94,4 @@ public class EyesMethodInterceptor implements MethodInterceptor {
             }
         }
     }
-    private String getProjectName(){
-        String path=this.getClass().getClassLoader().getResource("/").getPath();
-        String[] names=path.split("/");
-        return names[names.length-3];
-    }
-
 }

@@ -19,6 +19,9 @@ public class RPCSpan extends  Span implements Serializable {
      * 父级id,用于构建调用链树
      */
     private String parentId;
+    private String ip;
+    private String state;
+    private String result=RPCResultEnum.OK.getKey();
 
     private Long cs;
 
@@ -28,11 +31,6 @@ public class RPCSpan extends  Span implements Serializable {
 
     private Long ss;
 
-    private String ip;
-
-    private String state;
-
-    private String result=RPCResultEnum.OK.getKey();
     public String getParentId() {
         return parentId;
     }

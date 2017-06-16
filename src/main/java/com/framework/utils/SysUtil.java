@@ -15,7 +15,11 @@ public class SysUtil {
         String[] names=System.getProperty("user.dir").split("/");
         return names[names.length-1];
     }
-
+    public static String getProjectName(Object obj){
+        String path=obj.getClass().getClassLoader().getResource("/").getPath();
+        String[] names=path.split("/");
+        return names[names.length-3];
+    }
     /**
      * 获取本机IP
      * @return

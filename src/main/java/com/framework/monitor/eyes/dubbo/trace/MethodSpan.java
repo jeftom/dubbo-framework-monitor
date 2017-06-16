@@ -12,12 +12,14 @@ import java.util.List;
 public class MethodSpan extends Span implements Serializable {
     private static final long serialVersionUID = 6185949997237664073L;
 
-    public Long cs;
-    public Long cr;
+
     public String spanId;
     public String parentId;
     public String ip;
     public String result=RPCResultEnum.OK.getKey();
+    private String state;
+    public Long cs;
+    public Long cr;
     /**
      * 父级节点
      */
