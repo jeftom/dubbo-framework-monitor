@@ -3,9 +3,8 @@ package com.framework.monitor.eyes.dubbo.Interceptor;
 import com.framework.monitor.Interceptor.StackData;
 
 import com.framework.monitor.Interceptor.bean.DistributionTraceBean;
-import com.framework.monitor.eyes.dubbo.trace.TraceContext;
-import com.framework.monitor.eyes.dubbo.trace.LocalTraceData;
-import com.framework.monitor.eyes.dubbo.trace.MethodSpan;
+import com.framework.monitor.eyes.dubbo.trace.*;
+import com.framework.utils.SysUtil;
 import com.google.api.client.repackaged.com.google.common.base.Joiner;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -47,7 +46,7 @@ public class EyesMethodInterceptor implements MethodInterceptor {
                 before(name);
                 result = invocation.proceed();
             } finally {
-                after(threshold);
+                after();
             }
             return result;
 
@@ -56,64 +55,49 @@ public class EyesMethodInterceptor implements MethodInterceptor {
         }
 
     }
-
-    /**
-     * 统计方法执行时间开始，该方法放置于MethodInvocation的proceed之前。
-     *
-     * @param methodName 纪录被代理类的方法名（即被拦截的被代理类方法名）
-     */
-    public void before(String methodName) {
+    public void before(String name) {
         //设置全局调用链唯一ID
         String traceId= TraceContext.getTraceId();
-        //从TraceContext中获取AOP拦截的方法构建的TraceData结构数据
-        LocalTraceData traceData = TraceContext.getMethodTrace();
-        MethodSpan currentEntry = new MethodSpan(methodName, System.currentTimeMillis());
-        if (traceData == null  || traceData.currentEntry == null) {
-            traceData = new LocalTraceData();
-            traceData.root = currentEntry;
-            traceData.currentEntry=currentEntry;
-            traceData.level = 0;
+        if (traceId == null) {
+            traceId= UUID.randomUUID().toString();
+            TraceContext.setTraceId(traceId);
+        }
+
+        MethodSpan currentSpan=TraceContext.getSpan();
+        MethodSpan span =new MethodSpan(name,System.currentTimeMillis());
+        if(currentSpan==null){//如果为空说明是第一次进来
             TraceContext.start();
-            if(traceId==null){
-                traceId= UUID.randomUUID().toString();
-                TraceContext.setTraceId(traceId);
-            }
-            TraceContext.setMethodTrace(traceData);
-        } else {
-            MethodSpan parent = traceData.currentEntry;
-            currentEntry.parent = parent;
-            //被引用的子方法纪录到child中
-            //parent.childs.add(currentEntry);
-            currentEntry.setTraceId(traceId);
+            span.spanId="0";
+            span.parentId="-1";
+        }else{//不是第一次
+            //设置上下文的span,新建一个当前的span,id新成成,parent为上下文拿到的,设置parent为上下文的span,然后替换掉上下文
+            span.spanId=currentSpan.spanId+"."+currentSpan.childs.size();//生成下一级spanid 号
+            span.parentId=currentSpan.spanId;
+            span.parent=currentSpan;
         }
-        currentEntry.setTraceId(traceId);
-        EYESLOGGER.info(currentEntry.toString());
-        //纪录的结点下移，深度加一。
-        traceData.currentEntry = currentEntry;//设置当前节点
-        currentEntry.level = traceData.level;//设置点钱节点级别
-        TraceContext.setSpanId(traceData.currentEntry.level+"");
-        traceData.level++;
-
+        span.setApplicationName(getProjectName());
+        span.ip=SysUtil.getLocalIp();
+        span.setTraceId(traceId);
+        TraceContext.setSpan(span);
+        TraceContext.setSpanId(span.spanId);
+        EYESLOGGER.info(span.toString());
     }
-
-    /**
-     * 统计方法执行时间结束，该方法放置于MethodInvocation的proceed之后
-     *
-     * @param threshold 是否打印方法执行时间的阈值，统计结束时将执行时间超过该值则写入日志
-     */
-    public void after(int threshold) {
-        LocalTraceData traceData = TraceContext.getMethodTrace();
-        if (traceData != null) {
-            MethodSpan self = traceData.currentEntry;
-            if(self!=null){
-                self.endTime = System.currentTimeMillis();
-                traceData.currentEntry = self.parent;
-                traceData.level--;
-                EYESLOGGER.info(self.toString());
-                TraceContext.setSpanId(traceData.level+"");
+    public void after() {
+        MethodSpan currentSpan=TraceContext.getSpan();
+        if (currentSpan != null) {
+            currentSpan.cr = System.currentTimeMillis();
+            EYESLOGGER.info(currentSpan.toString());
+            MethodSpan parent = currentSpan.parent;
+            if(parent!=null){//父级为空说明是顶级
+                TraceContext.setSpan(parent);
+                TraceContext.setSpanId(parent.spanId);
             }
         }
-
-
     }
+    private String getProjectName(){
+        String path=this.getClass().getClassLoader().getResource("/").getPath();
+        String[] names=path.split("/");
+        return names[names.length-3];
+    }
+
 }

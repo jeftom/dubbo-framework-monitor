@@ -12,21 +12,24 @@ import java.util.List;
 public class MethodSpan extends Span implements Serializable {
     private static final long serialVersionUID = 6185949997237664073L;
 
-    public Long beginTime;
-    public Long endTime;
-    public int  level;
+    public Long cs;
+    public Long cr;
+    public String spanId;
+    public String parentId;
+    public String ip;
+    public String result=RPCResultEnum.OK.getKey();
     /**
      * 父级节点
      */
-    public MethodSpan parent;
+    transient public MethodSpan parent;
     /**
      * 调用子方法节点
      */
-   // public List<MethodSpan> childs;
+    transient public List<MethodSpan> childs;
     public MethodSpan(String methodName, long currentTimeMillis) {
-        this.setMethodName(methodName);
-        this.beginTime = currentTimeMillis;
-       // this.childs = new ArrayList<MethodSpan>(3);
+        this.setName(methodName);
+        this.cs = currentTimeMillis;
+        this.childs = new ArrayList<MethodSpan>(3);
     }
 
     @Override

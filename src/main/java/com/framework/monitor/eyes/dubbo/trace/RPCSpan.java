@@ -10,7 +10,6 @@ import java.io.Serializable;
 public class RPCSpan extends  Span implements Serializable {
 
     private static final long serialVersionUID = -5351285011174602214L;
-    private String applicationName;
 
     /**
      * 每一次调用都认为是一个span
@@ -65,14 +64,6 @@ public class RPCSpan extends  Span implements Serializable {
 
     public void setSr(Long sr) {
         this.sr = sr;
-    }
-
-    public String getApplicationName() {
-        return applicationName;
-    }
-
-    public void setApplicationName(String applicationName) {
-        this.applicationName = applicationName;
     }
 
     public String getIp() {

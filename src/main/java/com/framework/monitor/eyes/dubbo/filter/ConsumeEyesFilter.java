@@ -39,14 +39,14 @@ public class ConsumeEyesFilter implements Filter {
             TraceContext.setSpanId(spanId);
         }
         //生成本地调用span
-        String nextChildSpanId= SpanIDUtil.proNextChildSpanId();
+        String nextChildSpanId= SpanIDUtil.proRpcNextChildSpanId();
         RPCSpan consumeSpan=new RPCSpan();
         consumeSpan.setParentId(spanId);
         consumeSpan.setSpanId(nextChildSpanId);
         consumeSpan.setTraceId(traceId);
         consumeSpan.setCs(System.currentTimeMillis());
         consumeSpan.setApplicationName(applicationName);
-        consumeSpan.setMethodName(methodName);
+        consumeSpan.setName(methodName);
         consumeSpan.setIp(ip);
         TraceContext.addChildSpan(consumeSpan);
         Gson gson=new Gson();

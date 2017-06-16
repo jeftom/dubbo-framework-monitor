@@ -10,8 +10,9 @@ import java.util.List;
 public class TraceContext implements Serializable{
     private static ThreadLocal<String> TRACE_ID = new InheritableThreadLocal<>();
     private static ThreadLocal<String> LOCAL_SPAN_ID = new InheritableThreadLocal<>();
+    private static ThreadLocal<MethodSpan> LOCAL_SPAN = new InheritableThreadLocal<>();
     private static ThreadLocal<List<RPCSpan>> CHILD_SPAN_LIST = new InheritableThreadLocal<>();
-    private static ThreadLocal<LocalTraceData> LOCAL_METHDO_TRACE = new InheritableThreadLocal<>();
+    //private static ThreadLocal<LocalTraceData> LOCAL_METHDO_TRACE = new InheritableThreadLocal<>();
     public static final String TRACE_ID_KEY = "traceId";
     public static final String SPAN_ID_KEY = "spanId";
     public static final String SPAN_KEY="span";
@@ -25,7 +26,7 @@ public class TraceContext implements Serializable{
         TRACE_ID.remove();
         LOCAL_SPAN_ID.remove();
         CHILD_SPAN_LIST.remove();
-        LOCAL_METHDO_TRACE.remove();
+        //LOCAL_METHDO_TRACE.remove();
     }
     public static void start(){
         if(INIT_STATE.get()==null||(!INIT_STATE.get())){
@@ -53,10 +54,10 @@ public class TraceContext implements Serializable{
     public static void addChildSpan(RPCSpan span){
         CHILD_SPAN_LIST.get().add(span);
     }
-    public static LocalTraceData getMethodTrace(){
-        return LOCAL_METHDO_TRACE.get();
+    public static MethodSpan getSpan(){
+        return LOCAL_SPAN.get();
     }
-    public static void setMethodTrace(LocalTraceData traceData){
-        LOCAL_METHDO_TRACE.set(traceData);
+    public static void setSpan(MethodSpan span){
+        LOCAL_SPAN.set(span);
     }
 }

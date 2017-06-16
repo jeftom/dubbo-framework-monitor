@@ -32,7 +32,7 @@ public class ProviderEyesFilter implements Filter {
         RPCSpan serviceSpan=new RPCSpan();
         serviceSpan.setSr(System.currentTimeMillis());
         serviceSpan.setApplicationName(applicationName);
-        serviceSpan.setMethodName(methodName);
+        serviceSpan.setName(methodName);
         serviceSpan.setIp(ip);
         serviceSpan.setSpanId(clientSpan.getSpanId());
         serviceSpan.setTraceId(clientSpan.getTraceId());

@@ -11,7 +11,7 @@ public  class LocalTraceData {
     /**
      * 记录根根节点
      */
-    public MethodSpan root;
+    //public MethodSpan root;
     /**
      * 当前正在调用方法节点
      */
