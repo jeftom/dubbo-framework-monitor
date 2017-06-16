@@ -91,9 +91,11 @@ public class EyesMethodInterceptor implements MethodInterceptor {
             currentSpan.state=SpanStateEnum.CR.getKey();
             EYESLOGGER.info(currentSpan.toString());
             MethodSpan parent = currentSpan.parent;
-            if(parent!=null){//父级为空说明是顶级
+            if(parent!=null){
                 TraceContext.setSpan(parent);
                 TraceContext.setSpanId(parent.spanId);
+            }else{//父级为空说明是顶级,tomcat使用了线程池处理servlet请求,所以需要清空threadlocal变量
+                TraceContext.clear();
             }
         }
     }

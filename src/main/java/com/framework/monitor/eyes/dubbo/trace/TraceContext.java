@@ -25,6 +25,8 @@ public class TraceContext implements Serializable{
         TRACE_ID.remove();
         LOCAL_SPAN_ID.remove();
         CHILD_SPAN_LIST.remove();
+        LOCAL_SPAN.remove();
+        INIT_STATE.set(Boolean.FALSE);
         //LOCAL_METHDO_TRACE.remove();
     }
     public static void start(){
