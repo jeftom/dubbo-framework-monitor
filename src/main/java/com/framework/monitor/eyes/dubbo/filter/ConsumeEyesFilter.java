@@ -4,6 +4,8 @@ import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.remoting.TimeoutException;
 import com.alibaba.dubbo.rpc.*;
 import com.framework.monitor.eyes.dubbo.trace.*;
+import com.framework.monitor.eyes.dubbo.trace.enums.RPCResultEnum;
+import com.framework.monitor.eyes.dubbo.trace.enums.SpanStateEnum;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +17,7 @@ import java.util.UUID;
  * dubbo 消费方 监控
  * Created by yuanjinglin on 17/6/1.
  */
-//@Activate(group = "provider", value = "EyesFilter")
+//@Activate(group = "provider", value = "ConsumeEyesFilter")
 public class ConsumeEyesFilter implements Filter {
     private static final Logger LOGGER= LoggerFactory.getLogger("eyesFilterLog");
     @Override
@@ -40,7 +42,7 @@ public class ConsumeEyesFilter implements Filter {
         }
         //生成本地调用span
         String nextChildSpanId= SpanIDUtil.proRpcNextChildSpanId();
-        RPCSpan consumeSpan=new RPCSpan();
+        MethodSpan consumeSpan=new MethodSpan();
         consumeSpan.setParentId(spanId);
         consumeSpan.setSpanId(nextChildSpanId);
         consumeSpan.setTraceId(traceId);

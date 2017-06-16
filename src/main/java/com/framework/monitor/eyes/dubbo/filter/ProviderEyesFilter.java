@@ -2,10 +2,9 @@ package com.framework.monitor.eyes.dubbo.filter;
 
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.rpc.*;
-import com.framework.monitor.eyes.dubbo.trace.RPCResultEnum;
-import com.framework.monitor.eyes.dubbo.trace.RPCSpan;
-import com.framework.monitor.eyes.dubbo.trace.SpanStateEnum;
-import com.framework.monitor.eyes.dubbo.trace.TraceContext;
+import com.framework.monitor.eyes.dubbo.trace.*;
+import com.framework.monitor.eyes.dubbo.trace.enums.RPCResultEnum;
+import com.framework.monitor.eyes.dubbo.trace.enums.SpanStateEnum;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,7 @@ import java.util.Map;
  * dubbo 服务提供方 监控
  * Created by yuanjinglin on 17/6/1.
  */
-//@Activate(group = "provider", value = "EyesFilter")
+//@Activate(group = "provider", value = "ProviderEyesFilter")
 public class ProviderEyesFilter implements Filter {
     private static final Logger LOGGER= LoggerFactory.getLogger("eyesFilterLog");
     @Override
@@ -28,8 +27,8 @@ public class ProviderEyesFilter implements Filter {
         String methodName=url.getPath()+"."+paramMap.get("methods");
         String ip=url.getHost();
         Map<String, String> attaches = invocation.getAttachments();
-        RPCSpan clientSpan=gson.fromJson(attaches.get(TraceContext.SPAN_KEY),RPCSpan.class);
-        RPCSpan serviceSpan=new RPCSpan();
+        MethodSpan clientSpan=gson.fromJson(attaches.get(TraceContext.SPAN_KEY),MethodSpan.class);
+        MethodSpan serviceSpan=new MethodSpan();
         serviceSpan.setSr(System.currentTimeMillis());
         serviceSpan.setApplicationName(applicationName);
         serviceSpan.setName(methodName);

@@ -11,8 +11,7 @@ public class TraceContext implements Serializable{
     private static ThreadLocal<String> TRACE_ID = new InheritableThreadLocal<>();
     private static ThreadLocal<String> LOCAL_SPAN_ID = new InheritableThreadLocal<>();
     private static ThreadLocal<MethodSpan> LOCAL_SPAN = new InheritableThreadLocal<>();
-    private static ThreadLocal<List<RPCSpan>> CHILD_SPAN_LIST = new InheritableThreadLocal<>();
-    //private static ThreadLocal<LocalTraceData> LOCAL_METHDO_TRACE = new InheritableThreadLocal<>();
+    private static ThreadLocal<List<MethodSpan>> CHILD_SPAN_LIST = new InheritableThreadLocal<>();
     public static final String TRACE_ID_KEY = "traceId";
     public static final String SPAN_ID_KEY = "spanId";
     public static final String SPAN_KEY="span";
@@ -51,7 +50,7 @@ public class TraceContext implements Serializable{
     public static int getNextSpanId(){
        return CHILD_SPAN_LIST.get().size();
     }
-    public static void addChildSpan(RPCSpan span){
+    public static void addChildSpan(MethodSpan span){
         CHILD_SPAN_LIST.get().add(span);
     }
     public static MethodSpan getSpan(){

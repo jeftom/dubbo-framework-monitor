@@ -4,6 +4,7 @@ import com.framework.monitor.Interceptor.StackData;
 
 import com.framework.monitor.Interceptor.bean.DistributionTraceBean;
 import com.framework.monitor.eyes.dubbo.trace.*;
+import com.framework.monitor.eyes.dubbo.trace.enums.SpanStateEnum;
 import com.framework.utils.SysUtil;
 import com.google.api.client.repackaged.com.google.common.base.Joiner;
 import org.aopalliance.intercept.MethodInterceptor;
@@ -79,6 +80,7 @@ public class EyesMethodInterceptor implements MethodInterceptor {
         span.ip=SysUtil.getLocalIp();
         span.setTraceId(traceId);
         TraceContext.setSpan(span);
+        span.state= SpanStateEnum.CS.getKey();
         TraceContext.setSpanId(span.spanId);
         EYESLOGGER.info(span.toString());
     }
@@ -86,6 +88,7 @@ public class EyesMethodInterceptor implements MethodInterceptor {
         MethodSpan currentSpan=TraceContext.getSpan();
         if (currentSpan != null) {
             currentSpan.cr = System.currentTimeMillis();
+            currentSpan.state=SpanStateEnum.CR.getKey();
             EYESLOGGER.info(currentSpan.toString());
             MethodSpan parent = currentSpan.parent;
             if(parent!=null){//父级为空说明是顶级

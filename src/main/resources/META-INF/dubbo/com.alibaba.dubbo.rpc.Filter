@@ -1,3 +1,2 @@
-eyes=com.framework.monitor.eyes.dubbo.filter.EyesFilter
 consumeEyes=com.framework.monitor.eyes.dubbo.filter.ConsumeEyesFilter
 providerEyes=com.framework.monitor.eyes.dubbo.filter.ProviderEyesFilter

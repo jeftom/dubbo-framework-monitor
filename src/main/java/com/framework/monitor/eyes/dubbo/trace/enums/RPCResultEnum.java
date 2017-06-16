@@ -1,18 +1,18 @@
-package com.framework.monitor.eyes.dubbo.trace;
+package com.framework.monitor.eyes.dubbo.trace.enums;
 
 /**
  * Created by yuanjinglin on 17/6/8.
  */
-public enum SpanStateEnum {
-    CS("CS", "CS"),
-    SR("SR", "SR"),
-    SS("SS", "SS"),
-    CR("CR", "CR");
+public enum RPCResultEnum {
+    TIMEOUT("TIMEOUT", "TIMEOUT"),
+    ERROR("ERROR", "ERROR"),
+    OK("OK", "OK"),
+    FAILD("FAILD", "FAILD");
 
     private String key;
     private String des;
 
-    SpanStateEnum(String key, String des) {
+    RPCResultEnum(String key, String des) {
         this.key = key;
         this.des = des;
     }
