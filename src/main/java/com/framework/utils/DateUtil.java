@@ -1,5 +1,7 @@
 package com.framework.utils;
 
+import org.apache.commons.lang.time.DateUtils;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -7,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
+ * 日期工具类
  * Created by yuanjinglin on 17/6/19.
  */
 public class DateUtil {
@@ -48,6 +51,34 @@ public class DateUtil {
         Calendar c = getCalendar(date);
         c.add(Calendar.DATE, day);
         return setZeroTime(c.getTime());
+    }
+
+    /**
+     * 加几天
+     * @param date
+     * @param dayN  为负 则为减多少天
+     * @return
+     */
+    public static Date addDays(Date date,int dayN){
+        return DateUtils.addDays(date, dayN);
+    }
+    /**
+     * 加几月
+     * @param date
+     * @param monthN 负数为减少
+     * @return
+     */
+    public static Date addMonths(Date date,int monthN){
+        return DateUtils.addMonths(date, monthN);
+    }
+    /**
+     * 加几年
+     * @param date
+     * @param yearN 负数为减少
+     * @return
+     */
+    public static Date addYears(Date date,int yearN){
+        return DateUtils.addYears(date, yearN);
     }
 
     /**
