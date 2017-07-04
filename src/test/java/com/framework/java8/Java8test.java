@@ -4,6 +4,7 @@ package com.framework.java8;
 import com.google.common.collect.Lists;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -86,7 +87,12 @@ public class Java8test {
         List<String> listMapping=Stream.of(users).collect(Collectors.mapping(User::getName,Collectors.toList()));
 
 
+        //自定义
+        Predicate<String> startsWithJ = (n) -> n.startsWith("J");
+        Predicate<String> fourLetterLong = (n) -> n.length() == 4;
 
+        List<String> list=names.stream().filter(startsWithJ).collect(Collectors.toList());
+        List<String> list2=names.stream().filter(startsWithJ.and(fourLetterLong)).collect(Collectors.toList());
     }
 
 }
